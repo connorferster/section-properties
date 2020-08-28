@@ -26,8 +26,8 @@ class CrossSection:
 
     :param geometry: Cross-section geometry object used to generate the mesh
     :type geometry: :class:`~sectionproperties.pre.sections.Geometry`
-    :param mesh: Mesh object returned by meshpy
-    :type mesh: :class:`meshpy.triangle.MeshInfo`
+    :param mesh: Mesh dictionary returned by triangle
+    :type mesh: dict(mesh)
     :param materials: A list of material properties corresponding to various regions in the
         geometry and mesh. Note that if materials are specified, the number of material objects
         ust equal the number of regions in the geometry. If no materials are specified, only a
@@ -78,8 +78,8 @@ class CrossSection:
     :cvar int num_nodes: Number of nodes in the finite element mesh
     :cvar geometry: Cross-section geometry object used to generate the mesh
     :vartype geometry: :class:`~sectionproperties.pre.sections.Geometry`
-    :cvar mesh: Mesh object returned by meshpy
-    :vartype mesh: :class:`meshpy.triangle.MeshInfo`
+    :cvar mesh: Mesh dictionary returned by triangle
+    :vartype mesh: dict(mesh)
     :cvar mesh_nodes: Array of node coordinates from the mesh
     :vartype mesh_nodes: :class:`numpy.ndarray`
     :cvar mesh_elements: Array of connectivities from the mesh
@@ -97,15 +97,15 @@ class CrossSection:
     """
 
     def __init__(self, geometry, mesh, materials=None, time_info=False):
-        """Inits the CrossSection class."""
+        """Init the CrossSection class."""
 
         def init():
             self.geometry = geometry  # save geometry data
 
             # extract mesh data
-            nodes = np.array(mesh.points, dtype=np.dtype(float))
-            elements = np.array(mesh.elements, dtype=np.dtype(int))
-            attributes = np.array(mesh.element_attributes, dtype=np.dtype(int))
+            nodes = mesh["vertices"]
+            elements = mesh["triangles"]
+            attributes = np.array(mesh["triangle_attributes"].flatten(), dtype=np.dtype(int))
 
             # swap mid-node order to retain node ordering consistency
             elements[:, [3, 4, 5]] = elements[:, [5, 3, 4]]

@@ -38,7 +38,7 @@ class Geometry:
         self.perimeter = []
 
     def create_mesh(self, mesh_sizes):
-        """Creates a quadratic triangular mesh from the Geometry object.
+        """Create a quadratic triangular mesh from the Geometry object.
 
         :param mesh_sizes: A list of maximum element areas corresponding to each region within the
             cross-section geometry.

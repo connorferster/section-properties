@@ -1,5 +1,5 @@
 import numpy as np
-import meshpy.triangle as triangle
+import triangle as tr
 
 
 class Material:
@@ -506,7 +506,9 @@ class GeometryCleaner:
 
 
 def create_mesh(points, facets, holes, control_points, mesh_sizes):
-    """Creates a quadratic triangular mesh using the meshpy module, which utilises the code
+    """Create a mesh.
+
+    Create a quadratic triangular mesh using the triangle package, which utilises the code
     'Triangle', by Jonathan Shewchuk.
 
     :param points: List of points *(x, y)* defining the vertices of the cross-section
@@ -526,21 +528,17 @@ def create_mesh(points, facets, holes, control_points, mesh_sizes):
     :rtype: :class:`meshpy.triangle.MeshInfo`
     """
 
-    mesh = triangle.MeshInfo()  # create mesh info object
-    mesh.set_points(points)  # set points
-    mesh.set_facets(facets)  # set facets
-    mesh.set_holes(holes)  # set holes
+    tri = {}  # create input dictionary
 
-    # set regions
-    mesh.regions.resize(len(control_points))  # resize regions list
-    region_id = 0  # initialise region ID variable
+    tri["vertices"] = points  # set points
+    tri["segments"] = facets  # set facets
+
+    if holes:
+        tri["holes"] = holes  # set holes
+
+    tri["regions"] = []  # set regions
 
     for (i, cp) in enumerate(control_points):
-        mesh.regions[i] = [cp[0], cp[1], region_id, mesh_sizes[i]]
-        region_id += 1
+        tri["regions"].append([cp[0], cp[1], i, mesh_sizes[i]])
 
-    mesh = triangle.build(
-        mesh, min_angle=30, mesh_order=2, quality_meshing=True,
-        attributes=True, volume_constraints=True)
-
-    return mesh
+    return tr.triangulate(tri, 'pq30ao2neA')

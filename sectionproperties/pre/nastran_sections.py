@@ -6,7 +6,9 @@ import numpy as np
 
 
 class BARSection(Geometry):
-    """Constructs a BAR section with the center at the origin *(0, 0)*, with two parameters
+    """Construct a BAR section.
+
+    Construct a BAR section with the center at the origin *(0, 0)*, with two parameters
     defining dimensions. See Nastran documentation [1]_ [2]_ [3]_ [4]_ [5]_ for definition of
     parameters. Added by JohnDN90.
 
@@ -37,7 +39,7 @@ class BARSection(Geometry):
     """
 
     def __init__(self, DIM1, DIM2, shift=[0, 0]):
-        """Inits the BARSection class."""
+        """Init the BARSection class."""
 
         # force dimensions to be floating point values
         DIM1 *= 1.0
@@ -53,8 +55,8 @@ class BARSection(Geometry):
 
         # construct the points and facets
         self.points = [
-            [-0.5*DIM1, -0.5*DIM2], [0.5*DIM1, -0.5*DIM2],
-            [0.5*DIM1, 0.5*DIM2], [-0.5*DIM1, 0.5*DIM2]
+            [-0.5 * DIM1, -0.5 * DIM2], [0.5 * DIM1, -0.5 * DIM2],
+            [0.5 * DIM1, 0.5 * DIM2], [-0.5 * DIM1, 0.5 * DIM2]
         ]
         self.facets = [[0, 1], [1, 2], [2, 3], [3, 0]]
 
